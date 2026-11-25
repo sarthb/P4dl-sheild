@@ -1,0 +1,14 @@
+test: 771,161 window summaries from 31 runs (4.52% attack); validation (calibration) 66,619
+model: 9-128-64-32-1 MLP, batch norm folded -> 11,649 parameters; deployed threshold 0.7
+check: recomputed float probability vs probability logged live by the controller: median |diff| 3.48e-08, max 1.02e-06, decisions that differ 0
+calibrated input ranges per layer (validation, 99.99 pct): 4.44, 3.56, 6.45, 12.42
+              model weight_bits act_bits  model_bytes  decisions_changed     f1   prec    rec    fpr  auc    eer  FP  FN benign_blocked attackers_blocked  onset_to_block_mean  onset_to_block_max
+   float (deployed)       float    float        46596                  0 0.9968 0.9999 0.9938 0.0000  1.0 0.0002   3 217          1/424             41/41                0.202               1.172
+A16 (Pegasus-style)       float       16        46596                  0 0.9968 0.9999 0.9938 0.0000  1.0 0.0002   3 217          1/424             41/41                0.202               1.172
+   W16A16 (integer)          16       16        23298                  0 0.9968 0.9999 0.9938 0.0000  1.0 0.0002   3 217          1/424             41/41                0.202               1.172
+ A8 (Pegasus-style)       float        8        46596                 19 0.9967 0.9999 0.9935 0.0000  1.0 0.0002   3 228          1/424             41/41                0.202               1.172
+     W8A8 (integer)           8        8        11649                 12 0.9969 0.9999 0.9939 0.0000  1.0 0.0002   3 213          1/424             41/41                0.202               1.172
+ A6 (Pegasus-style)       float        6        46596                 62 0.9962 0.9999 0.9925 0.0000  1.0 0.0003   3 261          1/424             41/41                0.202               1.172
+     W6A6 (integer)           6        6         8736                 92 0.9970 0.9999 0.9941 0.0000  1.0 0.0002   3 207          1/424             41/41                0.202               1.172
+ A4 (Pegasus-style)       float        4        46596                343 0.9969 0.9958 0.9981 0.0002  1.0 0.0002 148  67         34/424             41/41                0.200               1.172
+     W4A4 (integer)           4        4         5824                425 0.9962 0.9933 0.9992 0.0003  1.0 0.0003 234  29         34/424             41/41                0.200               1.172

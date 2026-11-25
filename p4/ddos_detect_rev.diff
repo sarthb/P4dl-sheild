@@ -1,0 +1,127 @@
+--- /home/claude/repo/MTP1-main/ddos_detect.p4	2026-06-13 11:17:45.000000000 +0000
++++ /home/claude/exp/revision/p4/ddos_detect_rev.p4	2026-11-18 11:03:07.465132301 +0000
+@@ -1,3 +1,4 @@
++// P4-DL Shield — REVISION version of ddos_detect.p4 (changes marked REV)
+ #include <core.p4>
+ #include <v1model.p4>
+ 
+@@ -70,6 +71,8 @@
+     bit<2>  meter_color;   // 0/1/2 -> green/yellow/red (unused for now)
+     bit<1>  rate_limit_hit;
+     bit<1> do_drop; 
++    bit<8>  tag;          // REV: behavioural burst tag (no host identity)
++    bit<32> burst_cnt;    // REV: packets of this (src,dst) pair in current window
+ }
+ 
+ struct metadata_t {
+@@ -94,7 +97,8 @@
+     bit<16> dst_port;
+     bit<8>  tag_susp;   // 1 if tagged suspicious 
+     bit<16> pkt_len;
+-
++    bit<48> ingress_ts;   // REV: BMv2 ingress_global_timestamp (us) for latency breakdown
++    bit<32> burst_cnt;    // REV: burst counter value that produced the tag
+ }
+ 
+ /* =========================
+@@ -158,6 +162,13 @@
+     // DSCP=0x2A (101010b) -> diffserv = 0xA8 with ECN=0
+     const bit<8>  DIFFSERV_SUSP = 0xA8;
+ 
++    // REV: burst-tag rule. A (src,dst) pair is tagged suspicious when it sends more than
++    // BURST_PKTS packets inside one BURST_WIN_US window. Report these two values in the paper.
++    const bit<48> BURST_WIN_US = 100000;   // 100 ms window
++    const bit<32> BURST_PKTS   = 50;       // > 50 pkts / 100 ms  (= 500 pps) -> tag = 1
++    register<bit<32>>(4096) burst_cnt_reg;
++    register<bit<48>>(4096) burst_win_reg;
++
+     // ---------- Actions ----------
+     action set_device_id(bit<32> dev_id) {
+         meta.feat.device_id = dev_id;
+@@ -212,6 +223,8 @@
+         d.tag_susp  = tag_val;
+ 
+         d.pkt_len   = hdr.ipv4.totalLen;
++        d.ingress_ts = standard_metadata.ingress_global_timestamp;
++        d.burst_cnt = meta.feat.burst_cnt;
+         
+         digest<feature_digest_t>(1, d);  // 1 = arbitrary digest id
+     }
+@@ -306,6 +319,16 @@
+         default_action = NoAction();
+     }
+ 
++    // REV: what to do with tagged packets BEFORE the DNN confirms (Reviewer 1 #2 / #5).
++    // default NoAction = hybrid mode (tag only informs the DNN);
++    // controller sets default to drop() for the "tag-only, in-switch" baseline.
++    table tag_policy {
++        key = { meta.feat.tag : exact; }
++        actions = { drop; NoAction; }
++        size = 4;
++        default_action = NoAction();
++    }
++
+     // ----Added--- 
+     table src_rate_limit {
+     key = {
+@@ -360,6 +383,8 @@
+         meta.feat.do_drop = 0;
+         meta.feat.rate_limit_hit = 0;
+         meta.feat.send_digest = 0;
++        meta.feat.tag = 0;
++        meta.feat.burst_cnt = 0;
+ 
+         // Optional: set per-switch device id (controller may install default)
+         dev_id_ctl.apply();
+@@ -404,6 +429,26 @@
+             // 3) Telemetry enable (wildcard/per-flow via controller)
+             telemetry_ctl.apply();
+ 
++            // 3b) REV: behavioural burst tagging (identity-free)
++            {
++                bit<32> bidx;
++                bit<32> bcnt;
++                bit<48> bwin;
++                bit<48> now = standard_metadata.ingress_global_timestamp;
++                hash(bidx, HashAlgorithm.crc32, 32w0, { hdr.ipv4.srcAddr, hdr.ipv4.dstAddr }, 32w4096);
++                burst_cnt_reg.read(bcnt, bidx);
++                burst_win_reg.read(bwin, bidx);
++                if (now - bwin > BURST_WIN_US) {
++                    bcnt = 0;
++                    bwin = now;
++                }
++                bcnt = bcnt + 1;
++                burst_cnt_reg.write(bidx, bcnt);
++                burst_win_reg.write(bidx, bwin);
++                meta.feat.burst_cnt = bcnt;
++                if (bcnt > BURST_PKTS) { meta.feat.tag = 1; } else { meta.feat.tag = 0; }
++            }
++
+             // 4) Per-flow guard.
+             // If controller has installed a drop rule, drop() sets meta.feat.do_drop = 1.
+             flow_guard.apply();
+@@ -412,6 +457,14 @@
+                 return;
+             }
+ 
++            // 4b) REV: optional pre-confirmation action on tagged packets
++            if (meta.feat.tag == 1) {
++                tag_policy.apply();
++                if (meta.feat.do_drop == 1) {
++                    return;
++                }
++            }
++
+             // 5) Source rate limiter for marked attacker sources
+             src_rate_limit.apply();
+ 
+@@ -436,8 +489,7 @@
+ 
+             // 7) Optional feature export
+             if (meta.feat.send_digest == 1) {
+-                bit<8> tagval = (hdr.ipv4.diffserv == DIFFSERV_SUSP) ? 8w1 : 8w0;
+-                export_features(tagval);
++                export_features(meta.feat.tag);   // REV: was DIFFSERV==0xA8, which was never set
+             }
+         }
+         // Other EtherTypes implicitly dropped

@@ -1,0 +1,113 @@
+ cp "/mnt/c/Users/Sarath/Downloads/switch_baselines.py" ~/MTP1-main/revision/analysis/switch_baselines.py
+grep -c "by protocol/port" ~/MTP1-main/revision/analysis/switch_baselines.py
+cd ~/MTP1-main
+~/p4env/bin/python3 revision/analysis/switch_baselines.py --out ~/switch_baselines
+1
+per-packet logs: train 4,927,270 records (9 runs), val 1,661,458 (3), test 16,372,691 (31 runs, 11.96% attack)
+
+[NetBeacon-style trees, 5-tuple] phase points: train 2,363, flows per phase (train): {0: 313, 1: 217, 2: 210, 3: 210, 4: 210, 5: 195, 6: 195, 7: 195, 8: 195, 9: 177, 10: 123, 11: 123}
+  seed 0: validation threshold 0.5; test F1 0.913
+  seed 1: validation threshold 0.5; test F1 0.787
+  seed 2: validation threshold 0.5; test F1 0.917
+  [NetBeacon-style trees, 5-tuple] benign flows blocked, by protocol/port: proto 17 dport 5001: 31
+
+[NetBeacon-style trees, 4-tuple] phase points: train 2,288, flows per phase (train): {0: 298, 1: 202, 2: 195, 3: 195, 4: 195, 5: 195, 6: 195, 7: 195, 8: 195, 9: 177, 10: 123, 11: 123}
+  seed 0: validation threshold 0.5; test F1 0.918
+  seed 1: validation threshold 0.5; test F1 0.789
+  seed 2: validation threshold 0.5; test F1 0.917
+  [NetBeacon-style trees, 4-tuple] benign flows blocked, by protocol/port: proto 17 dport 5001: 31
+  entropy w=0.05s alpha=0.05: validation window F1 0.245 at k=1.32
+  entropy w=0.05s alpha=0.2: validation window F1 0.221 at k=1.36
+  entropy w=0.1s alpha=0.05: validation window F1 0.245 at k=1.32
+  entropy w=0.1s alpha=0.2: validation window F1 0.221 at k=1.36
+  entropy w=0.25s alpha=0.05: validation window F1 0.171 at k=1.61
+  entropy w=0.25s alpha=0.2: validation window F1 0.176 at k=1.55
+  entropy w=0.5s alpha=0.05: validation window F1 0.052 at k=1.16
+  entropy w=0.5s alpha=0.2: validation window F1 0.042 at k=1.02
+  [In-switch entropy (P4DDoS/Euclid style)] benign flows blocked, by protocol/port: proto 1 dport 0: 86, proto 17 dport 5001: 62, proto 6 dport 5002: 31, proto 6 dport 57126: 1, proto 17 dport 39852: 1, proto 17 dport 45703: 1, proto 17 dport 48159: 1, proto 17 dport 49333: 1, proto 17 dport 53372: 1, proto 17 dport 53431: 1, proto 17 dport 54492: 1, proto 17 dport 58345: 1, proto 17 dport 60482: 1, proto 17 dport 60993: 1, proto 6 dport 54174: 1, proto 17 dport 34313: 1, proto 17 dport 36361: 1, proto 17 dport 37881: 1, proto 17 dport 41763: 1, proto 6 dport 38018: 1, proto 17 dport 40359: 1, proto 17 dport 46595: 1, proto 17 dport 50819: 1, proto 17 dport 50938: 1, proto 17 dport 51979: 1, proto 17 dport 53200: 1, proto 17 dport 53839: 1, proto 17 dport 57510: 1, proto 17 dport 58310: 1, proto 6 dport 42494: 1, proto 6 dport 43968: 1, proto 6 dport 52260: 1, proto 6 dport 60398: 1, proto 17 dport 45688: 1, proto 17 dport 36858: 1, proto 17 dport 40283: 1, proto 17 dport 36488: 1, proto 6 dport 55802: 1, proto 6 dport 33632: 1, proto 6 dport 35706: 1, proto 6 dport 47078: 1, proto 6 dport 48814: 1, proto 6 dport 57766: 1, proto 6 dport 37606: 1, proto 6 dport 49434: 1, proto 6 dport 35044: 1, proto 6 dport 56434: 1, proto 6 dport 53914: 1, proto 6 dport 37358: 1, proto 6 dport 34034: 1, proto 6 dport 59770: 1, proto 6 dport 34202: 1, proto 6 dport 45524: 1, proto 6 dport 47792: 1, proto 6 dport 41600: 1, proto 6 dport 42080: 1, proto 6 dport 44948: 1, proto 17 dport 38393: 1, proto 17 dport 40751: 1, proto 17 dport 46301: 1, proto 17 dport 48423: 1, proto 17 dport 48928: 1, proto 17 dport 51906: 1, proto 17 dport 52739: 1, proto 17 dport 56210: 1, proto 6 dport 58088: 1, proto 6 dport 54236: 1
+  ACMS dt=1.0s: best validation flow F1 so far 0.500 (dt=1.0, threshold=177)
+  ACMS dt=5.0s: best validation flow F1 so far 0.500 (dt=1.0, threshold=177)
+  ACMS dt=30.0s: best validation flow F1 so far 0.500 (dt=1.0, threshold=177)
+  [ACMS asymmetry (P4RTHENON in-switch stage)] benign flows blocked, by protocol/port: proto 1 dport 0: 45, proto 6 dport 5002: 31, proto 17 dport 5001: 13
+
+[DOE-DTL] windows: train 98,536 (18.8% attack), val 32,652, test 336,708
+  ELM L=100 C=100.0 (validation JI 0.737); pre-detection TB-MN < 401400 B; Smt=300 UDP packets / 0.2 s
+  [DOE-DTL (ELM + in-switch double threshold)] benign flows blocked, by protocol/port: proto 1 dport 0: 15
+  DOE-DTL network alarm, S1_single_A2_detect: 5/5 runs alarmed; 0 before the attack started (false alarm); onset -> alarm when after onset: 0.90 s
+  DOE-DTL network alarm, S2_distributed_detect: 5/5 runs alarmed; 0 before the attack started (false alarm); onset -> alarm when after onset: 1.02 s
+  DOE-DTL network alarm, S3_long_burst_500ms: 3/3 runs alarmed; 0 before the attack started (false alarm); onset -> alarm when after onset: 0.83 s
+  DOE-DTL network alarm, S3_period_2000ms: 3/3 runs alarmed; 1 before the attack started (false alarm); onset -> alarm when after onset: 0.94 s
+  DOE-DTL network alarm, S3_period_500ms: 3/3 runs alarmed; 1 before the attack started (false alarm); onset -> alarm when after onset: 0.94 s
+  DOE-DTL network alarm, S3_random_sport: 3/3 runs alarmed; 0 before the attack started (false alarm); onset -> alarm when after onset: 0.91 s
+  DOE-DTL network alarm, S3_short_burst_50ms: 3/3 runs alarmed; 1 before the attack started (false alarm); onset -> alarm when after onset: 4.25 s
+  DOE-DTL network alarm, S3_tiny_pkts_28B: 3/3 runs alarmed; 1 before the attack started (false alarm); onset -> alarm when after onset: 1.46 s
+  DOE-DTL network alarm, S4_mimicry: 3/3 runs alarmed; 0 before the attack started (false alarm); onset -> alarm when after onset: 2.85 s
+  [P4-DL Shield (per-flow MLP, deployed)] benign flows blocked, by protocol/port: proto 17 dport 5001: 1
+
+=== IN-SWITCH BASELINES vs P4-DL Shield (test scenarios; metrics in each method's own unit; flow level = first positive decision blocks the flow)
+                                    method    unit   prec    rec     f1    fpr    auc    eer  benign_flows  benign_blocked  attack_flows  attack_blocked  onset_to_block_mean  onset_to_block_max                                           note
+            NetBeacon-style trees, 5-tuple  packet 0.9989 0.7792 0.8724 0.0001 0.9472 0.0528           487              31            41              41                0.118               0.180                   F1 0.872 +- 0.074 over seeds
+            NetBeacon-style trees, 4-tuple  packet 0.9989 0.7829 0.8747 0.0001 0.9473 0.0527           487              31            41              41                0.118               0.180                   F1 0.875 +- 0.074 over seeds
+   In-switch entropy (P4DDoS/Euclid style)  window 0.2326 0.7196 0.3516 0.2296 0.7820 0.2433           487             243            41              41                0.121               0.192 w=0.05s alpha=0.05 k=1.32; per packet F1 0.435
+ACMS asymmetry (P4RTHENON in-switch stage)    flow    NaN    NaN    NaN    NaN    NaN    NaN           487              89            41              36                3.905              56.726                          dt=1.0s threshold=177
+DOE-DTL (ELM + in-switch double threshold)  window 0.9269 0.7637 0.8374 0.0229 0.9544 0.0887           487              15            41              18               10.942              39.183               L=100 C=100.0 tau=401400 Smt=300
+     P4-DL Shield (per-flow MLP, deployed) summary 0.9999 0.9938 0.9968 0.0000 1.0000 0.0002           424               1            41              41                0.202               1.172                threshold 0.7; 31 per-flow runs
+
+=== PER SCENARIO (flow level)
+                                    method              scenario  benign_flows  benign_blocked  attack_flows  attack_blocked  onset_to_block_mean  onset_to_block_max
+            NetBeacon-style trees, 5-tuple   S1_single_A2_detect            61               5             5               5                0.123               0.133
+            NetBeacon-style trees, 5-tuple S2_distributed_detect            91               5            15              15                0.083               0.143
+            NetBeacon-style trees, 5-tuple   S3_long_burst_500ms            37               3             3               3                0.164               0.180
+            NetBeacon-style trees, 5-tuple      S3_period_2000ms            36               3             3               3                0.149               0.155
+            NetBeacon-style trees, 5-tuple       S3_period_500ms            39               3             3               3                0.126               0.140
+            NetBeacon-style trees, 5-tuple       S3_random_sport           119               3             3               3                0.119               0.123
+            NetBeacon-style trees, 5-tuple   S3_short_burst_50ms            35               3             3               3                0.133               0.152
+            NetBeacon-style trees, 5-tuple      S3_tiny_pkts_28B            30               3             3               3                0.158               0.163
+            NetBeacon-style trees, 5-tuple            S4_mimicry            39               3             3               3                0.144               0.158
+            NetBeacon-style trees, 4-tuple   S1_single_A2_detect            61               5             5               5                0.123               0.133
+            NetBeacon-style trees, 4-tuple S2_distributed_detect            91               5            15              15                0.083               0.143
+            NetBeacon-style trees, 4-tuple   S3_long_burst_500ms            37               3             3               3                0.164               0.180
+            NetBeacon-style trees, 4-tuple      S3_period_2000ms            36               3             3               3                0.149               0.155
+            NetBeacon-style trees, 4-tuple       S3_period_500ms            39               3             3               3                0.126               0.140
+            NetBeacon-style trees, 4-tuple       S3_random_sport           119               3             3               3                0.119               0.123
+            NetBeacon-style trees, 4-tuple   S3_short_burst_50ms            35               3             3               3                0.133               0.152
+            NetBeacon-style trees, 4-tuple      S3_tiny_pkts_28B            30               3             3               3                0.158               0.163
+            NetBeacon-style trees, 4-tuple            S4_mimicry            39               3             3               3                0.144               0.158
+   In-switch entropy (P4DDoS/Euclid style)   S1_single_A2_detect            61              35             5               5                0.137               0.177
+   In-switch entropy (P4DDoS/Euclid style) S2_distributed_detect            91              46            15              15                0.083               0.143
+   In-switch entropy (P4DDoS/Euclid style)   S3_long_burst_500ms            37              21             3               3                0.164               0.180
+   In-switch entropy (P4DDoS/Euclid style)      S3_period_2000ms            36              15             3               3                0.149               0.155
+   In-switch entropy (P4DDoS/Euclid style)       S3_period_500ms            39              19             3               3                0.126               0.140
+   In-switch entropy (P4DDoS/Euclid style)       S3_random_sport           119              53             3               3                0.142               0.192
+   In-switch entropy (P4DDoS/Euclid style)   S3_short_burst_50ms            35              21             3               3                0.133               0.152
+   In-switch entropy (P4DDoS/Euclid style)      S3_tiny_pkts_28B            30              13             3               3                0.158               0.163
+   In-switch entropy (P4DDoS/Euclid style)            S4_mimicry            39              20             3               3                0.144               0.158
+ACMS asymmetry (P4RTHENON in-switch stage)   S1_single_A2_detect            61              10             5               5                0.137               0.177
+ACMS asymmetry (P4RTHENON in-switch stage) S2_distributed_detect            91              15            15              10                0.278               0.406
+ACMS asymmetry (P4RTHENON in-switch stage)   S3_long_burst_500ms            37               6             3               3                0.164               0.180
+ACMS asymmetry (P4RTHENON in-switch stage)      S3_period_2000ms            36              14             3               3                0.149               0.155
+ACMS asymmetry (P4RTHENON in-switch stage)       S3_period_500ms            39               8             3               3                0.193               0.302
+ACMS asymmetry (P4RTHENON in-switch stage)       S3_random_sport           119              12             3               3                0.169               0.192
+ACMS asymmetry (P4RTHENON in-switch stage)   S3_short_burst_50ms            35              10             3               3               44.665              56.726
+ACMS asymmetry (P4RTHENON in-switch stage)      S3_tiny_pkts_28B            30               4             3               3                0.158               0.163
+ACMS asymmetry (P4RTHENON in-switch stage)            S4_mimicry            39              10             3               3                0.211               0.323
+DOE-DTL (ELM + in-switch double threshold)   S1_single_A2_detect            61               5             5               5               23.372              36.175
+DOE-DTL (ELM + in-switch double threshold) S2_distributed_detect            91               0            15               0                  NaN                 NaN
+DOE-DTL (ELM + in-switch double threshold)   S3_long_burst_500ms            37               3             3               3                1.232               1.343
+DOE-DTL (ELM + in-switch double threshold)      S3_period_2000ms            36               3             3               3                2.285               2.359
+DOE-DTL (ELM + in-switch double threshold)       S3_period_500ms            39               1             3               1               18.480              18.480
+DOE-DTL (ELM + in-switch double threshold)       S3_random_sport           119               3             3               3               13.856              39.183
+DOE-DTL (ELM + in-switch double threshold)   S3_short_burst_50ms            35               0             3               0                  NaN                 NaN
+DOE-DTL (ELM + in-switch double threshold)      S3_tiny_pkts_28B            30               0             3               3                3.162               6.157
+DOE-DTL (ELM + in-switch double threshold)            S4_mimicry            39               0             3               0                  NaN                 NaN
+     P4-DL Shield (per-flow MLP, deployed)   S1_single_A2_detect            59               1             5               5                0.165               0.192
+     P4-DL Shield (per-flow MLP, deployed) S2_distributed_detect            75               0            15              15                0.131               0.245
+     P4-DL Shield (per-flow MLP, deployed)   S3_long_burst_500ms            30               0             3               3                0.171               0.186
+     P4-DL Shield (per-flow MLP, deployed)      S3_period_2000ms            36               0             3               3                0.160               0.173
+     P4-DL Shield (per-flow MLP, deployed)       S3_period_500ms            32               0             3               3                0.160               0.170
+     P4-DL Shield (per-flow MLP, deployed)       S3_random_sport           100               0             3               3                0.164               0.187
+     P4-DL Shield (per-flow MLP, deployed)   S3_short_burst_50ms            25               0             3               3                0.837               1.172
+     P4-DL Shield (per-flow MLP, deployed)      S3_tiny_pkts_28B            29               0             3               3                0.171               0.179
+     P4-DL Shield (per-flow MLP, deployed)            S4_mimicry            38               0             3               3                0.165               0.170
+
+done in 228 s

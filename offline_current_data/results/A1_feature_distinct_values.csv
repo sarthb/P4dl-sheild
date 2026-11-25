@@ -1,0 +1,13 @@
+,distinct_values
+proto,2
+tag,1
+pkt_len,4
+flow_packet_count,12151
+flow_byte_count,19041
+flow_duration,138449
+flow_packets_per_second,138449
+inter_arrival_time,102715
+cpu,1
+mem,1
+tx_MB,1
+rx_MB,1

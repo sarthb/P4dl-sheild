@@ -1,0 +1,11 @@
+split,run,rows,attack_rows,benign_rows,duration_s,tag_eq_1,attack_pkt_len,benign_udp_pkt_len,switches_reporting
+train,attack_ldos_L02,14674,1107,13567,165.0,0,[28],[],4
+train,attack_ldos_L025,13348,1179,12169,147.6,0,[28],[],4
+train,attack_ldos_port6001,13166,999,12167,147.6,0,[28],[],4
+train,normal,12512,0,12512,157.4,0,[],[],4
+train,normal_udp_5001_1M,43612,0,43612,130.4,0,[],[1498],4
+val,attack_ldos_L03,13494,1434,12060,146.4,0,[28],[],4
+val,normal_udp_5001,4992,0,4992,122.8,0,[],[1498],4
+test,A1,7394,555,6839,165.0,0,[28],[],4
+test,A2,7630,744,6886,165.8,0,[28],[],4
+test,A3,7701,798,6903,166.7,0,[28],[],4

@@ -1,0 +1,9 @@
+,0
+rows,113407
+attack,70508
+benign,42899
+exact_duplicate_rows,69530
+unique_rows,43877
+attack_rows_with_protocol0,70508
+benign_rows_with_protocol0,280
+label_runs_in_file_order,2
